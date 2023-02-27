@@ -1,0 +1,35 @@
+.qq-wrapper {
+    justify-content: center;
+    padding: 40px 0;
+    flex-wrap: wrap;
+    display: flex;
+    width: 550px;
+    gap: 30px;
+}
+.qq-container {
+    width: 550px;
+}
+.qq-container h3 {
+    margin-bottom: 50px;
+    text-align: center;
+    cursor: default;
+    font-size: 40px;
+}
+.op-wrapper {
+    margin: 0 0 20px 0;
+    display: flex;
+    gap: 10px 60px;
+}
+.op-wrapper button {
+    background-color:rgb(213, 165, 245);
+    background-color:rgb(97, 6, 158);
+    border-radius: 5px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 20px;
+    cursor: pointer;
+    width: 250px;
+    height: 50px;
+    border: none;
+}

@@ -1,0 +1,52 @@
+.l-container {
+    width: 100%;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+.l-card {
+    width: 650px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    flex-direction: column;
+    padding: 80px 40px 30px 40px;
+    background-color: rgb(97, 6, 158);
+}
+.l-card-input {
+    width: 100%;
+    outline: none;
+    font-size: 20px;
+    color: #5e5959;
+    text-align: center;
+    padding: 20px 30px;
+    border-radius: 10px;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+.l-card-btn-wrapper {
+    width: 100%;
+    display: flex;
+    padding: 50px 0 0 0;
+    justify-content: center;
+}
+.l-card-btn-wrapper button {
+    background-color: rgb(184, 121, 226);
+    border: rgb(97, 6, 158) 2px solid;
+    transition: 0.3s all;
+    letter-spacing: 1px;
+    border-radius: 5px;
+    padding: 15px 25px;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 23px;
+    margin: 0;
+}
+.l-card-btn-wrapper button:hover {
+    background-color: rgb(134, 73, 175);
+    border: #ffffff80 2px solid;
+    transition: 0.3s all;
+}
