@@ -7,11 +7,14 @@ import { QuizQuestions } from '../QuizQuestions';
 const QuizComponent = () => {
   const { username } = useContext(ResultsContext);
   const [exibirInstrucoes, setExibirInstrucoes] = useState(true);
+  const [storedUsername, setStoredUsername] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('username', username);
-  }, [username]);
-  
+    if (typeof window !== 'undefined') {
+      setStoredUsername(localStorage.getItem('username'));
+    }
+  }, []);
+
   const handleIniciarQuiz = () => {
     setExibirInstrucoes(false);
   };
@@ -20,7 +23,7 @@ const QuizComponent = () => {
     <>
       <header className={style['q-header']}>
         <h1>Quiz</h1>
-        <h4>Bem-vindo(a) <strong>{username}</strong>!</h4>
+        <h4>Bem-vindo(a) <strong dangerouslySetInnerHTML={{ __html: storedUsername || username }} /></h4>
       </header>
       <section className={style['q-content']}>
         {exibirInstrucoes ? (
