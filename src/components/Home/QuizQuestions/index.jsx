@@ -28,10 +28,10 @@ export function QuizQuestions() {
 
     function selecionarPerguntaAleatoria() {
         const perguntaSelecionada = listaPerguntas[perguntaAtual];
-        const opcoesEmbaralhadas = perguntaSelecionada ? embaralharRespostas(perguntaSelecionada.respostas) : null;
+        const opcoesResposta = perguntaSelecionada ? perguntaSelecionada.respostas : null;
         const pergunta = perguntaSelecionada ? perguntaSelecionada.pergunta : '';
 
-        return { pergunta, respostas: opcoesEmbaralhadas };
+        return { pergunta, respostas: opcoesResposta };
     }
 
     function handleResposta() {
@@ -49,9 +49,12 @@ export function QuizQuestions() {
         }
     
         return () => clearTimeout(timer);
+    }, [tempoRestante]);
+
+    useEffect(() => {
         // Embaralha a lista de perguntas sempre que o estado `listaPerguntas` for atualizado
         setListaPerguntas(embaralharRespostas(listaPerguntas));
-    }, [listaPerguntas, tempoRestante]);
+    }, [listaPerguntas]);
 
     const perguntaAleatoria = selecionarPerguntaAleatoria();
 
@@ -59,6 +62,7 @@ export function QuizQuestions() {
         <>
             <div className={style['qq-container']}>
                 <h3>{perguntaAleatoria.pergunta}</h3>
+                <p>tempo restante: {tempoRestante / 1000} segundos</p>
                 <div className={style['qq-wrapper']}>
                     {perguntaAleatoria.respostas && perguntaAleatoria.respostas.map((resposta, indice) => (
                         <Opcao key={indice} texto={resposta.texto} onClick={handleResposta} />

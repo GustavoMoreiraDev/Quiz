@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 
 import QuizComponent from '@/components/Home/quiz';
+import Private from '@/components/Private';
 
 const Quiz = () => {
 
@@ -14,6 +15,7 @@ const Quiz = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <QuizComponent />
+            <Private path="/quiz" component={QuizComponent} />
         </>
     )
 }
