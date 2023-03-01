@@ -4,7 +4,7 @@ import style from './style.module.css';
 import perguntas from '../../../service/perguntas.json';
 
 export function QuizQuestions() {
-    
+
     const [listaPerguntas, setListaPerguntas] = useState(perguntas.perguntas);
     const [tempoRestante, setTempoRestante] = useState(120000);
     const [perguntaAtual, setPerguntaAtual] = useState(0);
@@ -47,7 +47,7 @@ export function QuizQuestions() {
         if (tempoRestante === 0) {
             clearTimeout(timer);
         }
-    
+
         return () => clearTimeout(timer);
     }, [tempoRestante]);
 
@@ -61,8 +61,11 @@ export function QuizQuestions() {
     return (
         <>
             <div className={style['qq-container']}>
+                <div className={style['qq-timer-wrap']}>
+                    <p>tempo restante:</p>
+                    <p style={{width: '50px'}}><strong>{tempoRestante / 1000}s</strong></p>
+                </div>
                 <h3>{perguntaAleatoria.pergunta}</h3>
-                <p>tempo restante: {tempoRestante / 1000} segundos</p>
                 <div className={style['qq-wrapper']}>
                     {perguntaAleatoria.respostas && perguntaAleatoria.respostas.map((resposta, indice) => (
                         <Opcao key={indice} texto={resposta.texto} onClick={handleResposta} />
