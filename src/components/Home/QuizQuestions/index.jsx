@@ -7,7 +7,6 @@ import { ResultsContext } from "../../../service/resultsContext";
 import { Instrucoes } from "../instrucoes";
 import QuizResults from "../QuizResults";
 
-
 function shuffle(array) {
     let currentIndex = array.length;
     let temporaryValue, randomIndex;
@@ -33,9 +32,7 @@ export function QuizQuestions() {
     const { perguntas } = require("../../../service/perguntas.json");
 
     const shuffledQuestions = shuffle(perguntas);
-
     const currentQuestion = shuffledQuestions[currentQuestionIndex];
-
     const { pergunta, respostas } = currentQuestion;
 
     useEffect(() => {
@@ -76,7 +73,7 @@ export function QuizQuestions() {
         setQuizStarted(false);
         setQuizFinished(false);
         setCurrentQuestionIndex(0);
-        setTimeLeft(120);
+        setTimeLeft(10);
         setCorrectAnswers(0);
     }
 

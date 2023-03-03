@@ -2,27 +2,36 @@
     gap: 20px;
     width: 650px;
     display: flex;
+    cursor: default;
+    color: #ffffff;
+    padding: 80px 50px;
+    border-radius: 10px;
     align-items: center;
     flex-direction: column;
     justify-content: center;
     background-color: rgb(97, 6, 158);
-    border-radius: 10px;
-    color: #ffffff;
-    padding: 50px;
 }
 .qr-container h3 {
     font-size: 38px;
 }
 .qr-container p {
-    max-width: 35ch;
     font-size: 18px;
     padding: 10px 0;
     text-align: center;
 }
 .qr-container button {
-    padding: 10px 15px;
+    border: solid 2px rgb(173, 104, 219);
+    background-color: rgb(97, 6, 158);
+    transition: 0.3s all;
+    padding: 15px 45px;
+    border-radius: 5px;
+    color: #ffffff;
     font-weight: 600;
     font-size: 18px;
-    border: none;
+    cursor: pointer;
     margin: 0;
+}
+.qr-container button:hover {
+    background-color:rgb(173, 104, 219);
+    transition: 0.3s all;
 }
