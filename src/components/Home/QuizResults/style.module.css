@@ -1,0 +1,28 @@
+.qr-container {
+    gap: 20px;
+    width: 650px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgb(97, 6, 158);
+    border-radius: 10px;
+    color: #ffffff;
+    padding: 50px;
+}
+.qr-container h3 {
+    font-size: 38px;
+}
+.qr-container p {
+    max-width: 35ch;
+    font-size: 18px;
+    padding: 10px 0;
+    text-align: center;
+}
+.qr-container button {
+    padding: 10px 15px;
+    font-weight: 600;
+    font-size: 18px;
+    border: none;
+    margin: 0;
+}

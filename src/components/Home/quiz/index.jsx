@@ -6,7 +6,6 @@ import { QuizQuestions } from '../QuizQuestions';
 
 const QuizComponent = () => {
   const { username } = useContext(ResultsContext);
-  const [exibirInstrucoes, setExibirInstrucoes] = useState(true);
   const [storedUsername, setStoredUsername] = useState('');
 
   useEffect(() => {
@@ -26,13 +25,11 @@ const QuizComponent = () => {
         <h4>Bem-vindo(a) <strong dangerouslySetInnerHTML={{ __html: storedUsername || username }} /></h4>
       </header>
       <section className={style['q-content']}>
-        {exibirInstrucoes ? (
-          <Instrucoes onStartQuiz={handleIniciarQuiz} />
-        ) : (
           <QuizQuestions />
-        )}
       </section>
-      <footer></footer>
+      <footer>
+        
+      </footer>
     </>
   );
 };

@@ -1,80 +1,128 @@
-import React, { useState, useEffect } from "react";
-import style from './style.module.css';
+import React, { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
+import style from "./style.module.css";
 
-import perguntas from '../../../service/perguntas.json';
+import { ResultsContext } from "../../../service/resultsContext";
+
+import { Instrucoes } from "../instrucoes";
+import QuizResults from "../QuizResults";
+
+
+function shuffle(array) {
+    let currentIndex = array.length;
+    let temporaryValue, randomIndex;
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return array;
+}
 
 export function QuizQuestions() {
+    const router = useRouter();
+    const { username } = useContext(ResultsContext);
+    const [quizStarted, setQuizStarted] = useState(false);
+    const [quizFinished, setQuizFinished] = useState(false);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(10);
+    const [correctAnswers, setCorrectAnswers] = useState(0);
 
-    const [listaPerguntas, setListaPerguntas] = useState(perguntas.perguntas);
-    const [tempoRestante, setTempoRestante] = useState(120000);
-    const [perguntaAtual, setPerguntaAtual] = useState(0);
+    const { perguntas } = require("../../../service/perguntas.json");
 
-    function embaralharRespostas(respostas) {
-        // Função para embaralhar as opções de resposta
-        let indiceAtual = respostas.length;
-        let valorTemporario, indiceAleatorio;
+    const shuffledQuestions = shuffle(perguntas);
 
-        while (0 !== indiceAtual) {
-            indiceAleatorio = Math.floor(Math.random() * indiceAtual);
-            indiceAtual -= 1;
+    const currentQuestion = shuffledQuestions[currentQuestionIndex];
 
-            valorTemporario = respostas[indiceAtual];
-            respostas[indiceAtual] = respostas[indiceAleatorio];
-            respostas[indiceAleatorio] = valorTemporario;
-        }
-
-        return respostas;
-    }
-
-    function selecionarPerguntaAleatoria() {
-        const perguntaSelecionada = listaPerguntas[perguntaAtual];
-        const opcoesResposta = perguntaSelecionada ? perguntaSelecionada.respostas : null;
-        const pergunta = perguntaSelecionada ? perguntaSelecionada.pergunta : '';
-
-        return { pergunta, respostas: opcoesResposta };
-    }
-
-    function handleResposta() {
-        // Atualiza o índice da pergunta atual para selecionar a próxima pergunta aleatória
-        setPerguntaAtual(perguntaAtual + 1);
-    }
+    const { pergunta, respostas } = currentQuestion;
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setTempoRestante(tempoRestante - 1000);
-        }, 1000);
+        if (quizStarted) {
+            const intervalId = setInterval(() => {
+                setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+            }, 1000);
 
-        if (tempoRestante === 0) {
-            clearTimeout(timer);
+            return () => clearInterval(intervalId);
         }
-
-        return () => clearTimeout(timer);
-    }, [tempoRestante]);
+    }, [quizStarted]);
 
     useEffect(() => {
-        // Embaralha a lista de perguntas sempre que o estado `listaPerguntas` for atualizado
-        setListaPerguntas(embaralharRespostas(listaPerguntas));
-    }, [listaPerguntas]);
+        if (timeLeft === 0) {
+            setQuizFinished(true);
+        }
+    }, [timeLeft]);
 
-    const perguntaAleatoria = selecionarPerguntaAleatoria();
+    function startQuiz() {
+        setQuizStarted(true);
+    }
+
+    function handleAnswerClick(verdadeira) {
+        if (verdadeira) {
+            setCorrectAnswers(correctAnswers + 1);
+        }
+
+        const nextQuestionIndex = currentQuestionIndex + 1;
+
+        if (nextQuestionIndex < shuffledQuestions.length) {
+            setCurrentQuestionIndex(nextQuestionIndex);
+        } else {
+            setQuizFinished(true);
+        }
+    }
+
+    function handleRestartQuiz() {
+        setQuizStarted(false);
+        setQuizFinished(false);
+        setCurrentQuestionIndex(0);
+        setTimeLeft(120);
+        setCorrectAnswers(0);
+    }
+
+    if (quizFinished) {
+        return (
+            <QuizResults
+                username={username}
+                correctAnswers={correctAnswers}
+                totalQuestions={shuffledQuestions.length}
+                onRestartQuiz={handleRestartQuiz}
+            />
+        );
+    }
 
     return (
         <>
-            <div className={style['qq-container']}>
-                <div className={style['qq-timer-wrap']}>
-                    <p>tempo restante:</p>
-                    <p style={{width: '50px'}}><strong>{tempoRestante / 1000}s</strong></p>
+            {!quizStarted && (
+                <Instrucoes player={username} time={timeLeft} onStartQuiz={startQuiz} />
+            )}
+
+            {quizStarted && (
+                <div className={style["qq-container"]}>
+                    <div className={style["qq-timer-wrap"]}>
+                        <p>Tempo restante:</p>
+                        <p>
+                            <strong>{timeLeft}s</strong>
+                        </p>
+                    </div>
+                    <h3>{pergunta}</h3>
+                    <div className={style["qq-wrapper"]}>
+                        {respostas &&
+                            respostas.map((resposta) => (
+                                <Opcao
+                                    key={resposta.texto}
+                                    texto={resposta.texto}
+                                    verdadeira={resposta.verdadeira}
+                                    onClick={() => handleAnswerClick(resposta.verdadeira)}
+                                />
+                            ))}
+                    </div>
                 </div>
-                <h3>{perguntaAleatoria.pergunta}</h3>
-                <div className={style['qq-wrapper']}>
-                    {perguntaAleatoria.respostas && perguntaAleatoria.respostas.map((resposta, indice) => (
-                        <Opcao key={indice} texto={resposta.texto} onClick={handleResposta} />
-                    ))}
-                </div>
-            </div>
+            )}
         </>
-    )
+    );
 }
+
 
 function Opcao({ texto, onClick }) {
     return (

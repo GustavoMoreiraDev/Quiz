@@ -3,25 +3,38 @@
     display: flex;
     min-height: 100vh;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 .l-card {
     width: 650px;
-    height: 300px;
     display: flex;
-    align-items: center;
-    border-radius: 10px;
+    min-height: 100vh;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
     padding: 80px 40px 30px 40px;
     background-color: rgb(97, 6, 158);
+}
+.l-card-txt-wrapper {
+    padding: 50px 10px;
+}
+.l-card-txt-wrapper h1 {
+    font-size: 60px;
+    letter-spacing: 2px;
+    color: rgb(158, 81, 209);
+    margin-bottom: 20px;
+}
+.l-card-txt-wrapper p {
+    letter-spacing: 1px;
+    color: #ffffff;
+    font-size: 18px;
 }
 .l-card-input {
     width: 100%;
     outline: none;
-    font-size: 20px;
+    font-size: 18px;
     color: #5e5959;
-    text-align: center;
-    padding: 20px 30px;
+    padding: 15px 20px;
     border-radius: 10px;
     letter-spacing: 1px;
     text-decoration: none;
@@ -29,8 +42,14 @@
 .l-card-btn-wrapper {
     width: 100%;
     display: flex;
-    padding: 50px 0 0 0;
-    justify-content: center;
+    align-items: center;
+    padding: 30px 10px 0 10px;
+    justify-content: space-between;
+}
+.l-card-btn-link {
+    color: #ffffff;
+    text-decoration: underline;
+    font-size: 14px;
 }
 .l-card-btn-wrapper button {
     background-color: rgb(184, 121, 226);
@@ -38,11 +57,11 @@
     transition: 0.3s all;
     letter-spacing: 1px;
     border-radius: 5px;
-    padding: 15px 25px;
+    padding: 15px 55px;
     color: #ffffff;
     font-weight: 600;
     cursor: pointer;
-    font-size: 23px;
+    font-size: 14px;
     margin: 0;
 }
 .l-card-btn-wrapper button:hover {

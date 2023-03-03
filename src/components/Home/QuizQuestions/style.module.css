@@ -37,8 +37,8 @@
     gap: 10px 60px;
 }
 .op-wrapper button {
-    background-color:rgb(213, 165, 245);
     background-color:rgb(97, 6, 158);
+    transition: 0.3s;
     border-radius: 5px;
     text-align: center;
     color: #ffffff;
@@ -48,4 +48,8 @@
     width: 250px;
     height: 50px;
     border: none;
+}
+.op-wrapper button:hover {
+    background-color:rgb(74, 19, 110);
+    transition: 0.3s all;
 }
