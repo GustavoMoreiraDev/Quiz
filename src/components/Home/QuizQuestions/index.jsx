@@ -28,12 +28,18 @@ export function QuizQuestions() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [timeLeft, setTimeLeft] = useState(10);
     const [correctAnswers, setCorrectAnswers] = useState(0);
+    const [currentQuestion, setCurrentQuestion] = useState(null);
+    const [answered, setAnswered] = useState(false);
 
     const { perguntas } = require("../../../service/perguntas.json");
 
     const shuffledQuestions = shuffle(perguntas);
-    const currentQuestion = shuffledQuestions[currentQuestionIndex];
-    const { pergunta, respostas } = currentQuestion;
+
+    useEffect(() => {
+        setCurrentQuestion(shuffledQuestions[currentQuestionIndex]);
+        setAnswered(false);
+    }, [currentQuestionIndex, shuffledQuestions]);
+
 
     useEffect(() => {
         if (quizStarted) {
@@ -56,6 +62,12 @@ export function QuizQuestions() {
     }
 
     function handleAnswerClick(verdadeira) {
+        if (answered) {
+            return;
+        }
+
+        setAnswered(true);
+
         if (verdadeira) {
             setCorrectAnswers(correctAnswers + 1);
         }
@@ -75,6 +87,8 @@ export function QuizQuestions() {
         setCurrentQuestionIndex(0);
         setTimeLeft(10);
         setCorrectAnswers(0);
+        setCurrentQuestion(null);
+        setAnswered(false);
     }
 
     if (quizFinished) {
@@ -87,6 +101,12 @@ export function QuizQuestions() {
             />
         );
     }
+
+    if (!currentQuestion) {
+        return <p>Carregando perguntas...</p>;
+    }
+
+    const { pergunta, respostas } = currentQuestion;
 
     return (
         <>
@@ -111,6 +131,7 @@ export function QuizQuestions() {
                                     texto={resposta.texto}
                                     verdadeira={resposta.verdadeira}
                                     onClick={() => handleAnswerClick(resposta.verdadeira)}
+                                    disabled={quizFinished}
                                 />
                             ))}
                     </div>
@@ -120,15 +141,14 @@ export function QuizQuestions() {
     );
 }
 
-
-function Opcao({ texto, onClick }) {
+function Opcao({ texto, onClick, verdadeira, disabled }) {
     return (
         <>
-            <div className={style['op-wrapper']}>
-                <button type="button" onClick={onClick}>
+            <div className={style["op-wrapper"]}>
+                <button type="button" onClick={onClick} disabled={disabled}>
                     {texto}
                 </button>
             </div>
         </>
-    )
+    );
 }
