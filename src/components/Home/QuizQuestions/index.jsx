@@ -141,7 +141,7 @@ export function QuizQuestions() {
     );
 }
 
-function Opcao({ texto, onClick, verdadeira, disabled }) {
+function Opcao({ texto, onClick, disabled }) {
     return (
         <>
             <div className={style["op-wrapper"]}>
