@@ -38,11 +38,11 @@
 }
 .op-wrapper button {
     background-color:rgb(97, 6, 158);
-    transition: 0.3s;
     border-radius: 5px;
     text-align: center;
     color: #ffffff;
     font-weight: 600;
+    transition: 0.3s;
     font-size: 20px;
     cursor: pointer;
     width: 250px;
