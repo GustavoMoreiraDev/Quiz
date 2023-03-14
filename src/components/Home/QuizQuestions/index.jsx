@@ -1,154 +1,105 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useRouter } from "next/router";
-import style from "./style.module.css";
-
-import { ResultsContext } from "../../../service/resultsContext";
-
-import { Instrucoes } from "../instrucoes";
-import QuizResults from "../QuizResults";
-
-function shuffle(array) {
-    let currentIndex = array.length;
-    let temporaryValue, randomIndex;
-    while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-    return array;
-}
+import React, { useState, useEffect } from "react";
+import style from './style.module.css';
+import axios from "axios";
 
 export function QuizQuestions() {
-    const router = useRouter();
-    const { username } = useContext(ResultsContext);
-    const [quizStarted, setQuizStarted] = useState(false);
-    const [quizFinished, setQuizFinished] = useState(false);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(10);
-    const [correctAnswers, setCorrectAnswers] = useState(0);
-    const [currentQuestion, setCurrentQuestion] = useState(null);
-    const [answered, setAnswered] = useState(false);
-
-    const { perguntas } = require("../../../service/perguntas.json");
-
-    const shuffledQuestions = shuffle(perguntas);
+    const [perguntaIndex, setPerguntaIndex] = useState(0);
+    const [perguntas, setPerguntas] = useState([]);
+    const [pontuacao, setPontuacao] = useState(0);
+    const [tempoTotal, setTempoTotal] = useState(120); // 120 seconds
+    const [tempoRestante, setTempoRestante] = useState(0);
 
     useEffect(() => {
-        setCurrentQuestion(shuffledQuestions[currentQuestionIndex]);
-        setAnswered(false);
-    }, [currentQuestionIndex, shuffledQuestions]);
-
-
-    useEffect(() => {
-        if (quizStarted) {
-            const intervalId = setInterval(() => {
-                setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
-            }, 1000);
-
-            return () => clearInterval(intervalId);
+        async function fetchData() {
+            const response = await axios.get('https://spilinsh.vercel.app/start-quiz');
+            setPerguntas(response.data);
+            setTempoRestante(tempoTotal);
         }
-    }, [quizStarted]);
+        fetchData();
+    }, []);
 
     useEffect(() => {
-        if (timeLeft === 0) {
-            setQuizFinished(true);
-        }
-    }, [timeLeft]);
+        const timer = setInterval(() => {
+            if (tempoRestante > 0) {
+                setTempoRestante(tempoRestante - 1);
+            } else {
+                clearInterval(timer);
+                handleQuizEnd();
+            }
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [tempoRestante]);
 
-    function startQuiz() {
-        setQuizStarted(true);
+    function handleRespostaEscolhida(respostaIndex) {
+        const perguntaAtual = perguntas[perguntaIndex];
+        const respostaCorretaIndex = perguntaAtual.respostas.findIndex(r => r.verdadeira);
+        if (respostaIndex === respostaCorretaIndex) {
+            setPontuacao(pontuacao + 1);
+        }
+        handleNextQuestion();
     }
 
-    function handleAnswerClick(verdadeira) {
-        if (answered) {
-            return;
-        }
-
-        setAnswered(true);
-
-        if (verdadeira) {
-            setCorrectAnswers(correctAnswers + 1);
-        }
-
-        const nextQuestionIndex = currentQuestionIndex + 1;
-
-        if (nextQuestionIndex < shuffledQuestions.length) {
-            setCurrentQuestionIndex(nextQuestionIndex);
+    function handleNextQuestion() {
+        if (perguntaIndex < perguntas.length - 1) {
+            setPerguntaIndex(perguntaIndex + 1);
         } else {
-            setQuizFinished(true);
+            handleQuizEnd();
         }
     }
 
-    function handleRestartQuiz() {
-        setQuizStarted(false);
-        setQuizFinished(false);
-        setCurrentQuestionIndex(0);
-        setTimeLeft(10);
-        setCorrectAnswers(0);
-        setCurrentQuestion(null);
-        setAnswered(false);
+    function handleQuizEnd() {
+        setTempoRestante(0);
     }
-
-    if (quizFinished) {
-        return (
-            <QuizResults
-                username={username}
-                correctAnswers={correctAnswers}
-                totalQuestions={shuffledQuestions.length}
-                onRestartQuiz={handleRestartQuiz}
-            />
-        );
-    }
-
-    if (!currentQuestion) {
-        return <p>Carregando perguntas...</p>;
-    }
-
-    const { pergunta, respostas } = currentQuestion;
 
     return (
         <>
-            {!quizStarted && (
-                <Instrucoes player={username} time={timeLeft} onStartQuiz={startQuiz} />
-            )}
-
-            {quizStarted && (
-                <div className={style["qq-container"]}>
+            {perguntas.length > 0 && perguntaIndex < perguntas.length ? (
+                <div className={style['qq-container']}>
                     <div className={style["qq-timer-wrap"]}>
                         <p>Tempo restante:</p>
                         <p>
-                            <strong>{timeLeft}s</strong>
+                            <strong>{Math.floor(tempoRestante / 60)}:{(tempoRestante % 60).toString().padStart(2, '0')}s</strong>
                         </p>
                     </div>
-                    <h3>{pergunta}</h3>
+                    <h3>{perguntas[perguntaIndex].pergunta}</h3>
                     <div className={style["qq-wrapper"]}>
-                        {respostas &&
-                            respostas.map((resposta) => (
-                                <Opcao
-                                    key={resposta.texto}
-                                    texto={resposta.texto}
-                                    verdadeira={resposta.verdadeira}
-                                    onClick={() => handleAnswerClick(resposta.verdadeira)}
-                                    disabled={quizFinished}
-                                />
-                            ))}
+                        <Respo
+                            respostas={perguntas[perguntaIndex].respostas}
+                            onRespostaEscolhida={handleRespostaEscolhida}
+                        />
                     </div>
+                </div>
+            ) : (
+                <div className={style['qq-container']}>
+                    <h3>Parabéns! Você finalizou o quiz.</h3>
+                    <p>Pontuação: {pontuacao}</p>
+                    <p>Tempo total: {tempoTotal} segundos</p>
                 </div>
             )}
         </>
-    );
-}
+    )
+};
 
-function Opcao({ texto, onClick, disabled }) {
+function Respo({ respostas, onRespostaEscolhida }) {
+    function handleButtonClick(index) {
+        onRespostaEscolhida(index);
+    }
+
     return (
         <>
-            <div className={style["op-wrapper"]}>
-                <button type="button" onClick={onClick} disabled={disabled}>
-                    {texto}
-                </button>
-            </div>
+            {
+                respostas.map((resposta, index) => (
+                    <div className={style['op-wrapper']} key={index}>
+                        <button
+                            type="button"
+                            className={resposta.verdadeira ? 'resposta-correta' : ''}
+                            onClick={() => handleButtonClick(index)}
+                        >
+                            {resposta.texto}
+                        </button>
+                    </div>
+                ))
+            }
         </>
-    );
+    )
 }
