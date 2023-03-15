@@ -16,7 +16,8 @@ export function QuizQuestions() {
             setTempoRestante(tempoTotal);
         }
         fetchData();
-    }, []);
+    }, [tempoTotal]);
+    
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -36,14 +37,18 @@ export function QuizQuestions() {
         if (respostaIndex === respostaCorretaIndex) {
             setPontuacao(pontuacao + 1);
         }
-        handleNextQuestion();
+        if (perguntaIndex === perguntas.length - 1 && tempoRestante > 0) {
+            handleQuizEnd();
+        } else {
+            handleNextQuestion();
+        }
     }
 
     function handleNextQuestion() {
-        if (perguntaIndex < perguntas.length - 1) {
-            setPerguntaIndex(perguntaIndex + 1);
-        } else {
+        if (perguntaIndex === perguntas.length - 1 && tempoRestante > 0) {
             handleQuizEnd();
+        } else {
+            setPerguntaIndex(perguntaIndex + 1);
         }
     }
 
@@ -58,48 +63,38 @@ export function QuizQuestions() {
                     <div className={style["qq-timer-wrap"]}>
                         <p>Tempo restante:</p>
                         <p>
-                            <strong>{Math.floor(tempoRestante / 60)}:{(tempoRestante % 60).toString().padStart(2, '0')}s</strong>
+                            <strong>{Math.floor(tempoRestante)}s</strong>
                         </p>
                     </div>
-                    <h3>{perguntas[perguntaIndex].pergunta}</h3>
-                    <div className={style["qq-wrapper"]}>
-                        <Respo
-                            respostas={perguntas[perguntaIndex].respostas}
-                            onRespostaEscolhida={handleRespostaEscolhida}
-                        />
+                    <div className={style['qq-content']}>
+                        <div className={style['qq-question']}>
+                            <h3>{perguntas[perguntaIndex].pergunta}</h3>
+                        </div>
+                        <div className={style['qq-answers']}>
+                            {perguntas[perguntaIndex].respostas.map((resposta, index) => (
+                                <div
+                                    key={index}
+                                    className={style['qq-answer']}
+                                    onClick={() => handleRespostaEscolhida(index)}
+                                >
+                                    <p>{resposta.texto}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className={style['qq-pontuacao']}>
+                            <p>Pontuação: {pontuacao}</p>
+                        </div>
+                        <div className={style['qq-nav']}>
+                            <button onClick={handleNextQuestion}>Próxima</button>
+                        </div>
                     </div>
                 </div>
             ) : (
-                <div className={style['qq-container']}>
-                    <h3>Parabéns! Você finalizou o quiz.</h3>
-                    <p>Pontuação: {pontuacao}</p>
-                    <p>Tempo total: {tempoTotal} segundos</p>
+                <div>
+                    <h2>Fim do Quiz</h2>
+                    <p>Sua pontuação foi: {pontuacao}</p>
                 </div>
             )}
         </>
-    )
-};
-
-function Respo({ respostas, onRespostaEscolhida }) {
-    function handleButtonClick(index) {
-        onRespostaEscolhida(index);
-    }
-
-    return (
-        <>
-            {
-                respostas.map((resposta, index) => (
-                    <div className={style['op-wrapper']} key={index}>
-                        <button
-                            type="button"
-                            className={resposta.verdadeira ? 'resposta-correta' : ''}
-                            onClick={() => handleButtonClick(index)}
-                        >
-                            {resposta.texto}
-                        </button>
-                    </div>
-                ))
-            }
-        </>
-    )
+    );
 }
