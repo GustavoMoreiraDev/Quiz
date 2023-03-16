@@ -2,22 +2,26 @@ import React, { useState, useEffect } from "react";
 import style from './style.module.css';
 import axios from "axios";
 
-export function QuizQuestions() {
+import QuizResults from '@/components/Home/QuizResults';
+
+export function QuizQuestions({ nickname }) {
     const [perguntaIndex, setPerguntaIndex] = useState(0);
     const [perguntas, setPerguntas] = useState([]);
     const [pontuacao, setPontuacao] = useState(0);
-    const [tempoTotal, setTempoTotal] = useState(120); // 120 seconds
+    const [tempoTotal, setTempoTotal] = useState(10); // segundos
     const [tempoRestante, setTempoRestante] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
+            setIsLoading(true);
             const response = await axios.get('https://spilinsh.vercel.app/start-quiz');
             setPerguntas(response.data);
             setTempoRestante(tempoTotal);
+            setIsLoading(false);
         }
         fetchData();
     }, [tempoTotal]);
-    
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -56,9 +60,17 @@ export function QuizQuestions() {
         setTempoRestante(0);
     }
 
+    function handleRestartQuiz() {
+        setPerguntaIndex(0);
+        setPontuacao(0);
+        setTempoRestante(tempoTotal);
+    }
+
     return (
         <>
-            {perguntas.length > 0 && perguntaIndex < perguntas.length ? (
+            {isLoading ? (
+                <p>Carregando perguntas...</p>
+            ) : perguntas.length > 0 && perguntaIndex < perguntas.length ? (
                 <div className={style['qq-container']}>
                     <div className={style["qq-timer-wrap"]}>
                         <p>Tempo restante:</p>
@@ -67,33 +79,29 @@ export function QuizQuestions() {
                         </p>
                     </div>
                     <div className={style['qq-content']}>
-                        <div className={style['qq-question']}>
-                            <h3>{perguntas[perguntaIndex].pergunta}</h3>
-                        </div>
-                        <div className={style['qq-answers']}>
+                        <h3>{perguntas[perguntaIndex].pergunta}</h3>
+                        <div className={style['qq-wrapper']}>
                             {perguntas[perguntaIndex].respostas.map((resposta, index) => (
                                 <div
                                     key={index}
-                                    className={style['qq-answer']}
+                                    className={style['qq-item']}
                                     onClick={() => handleRespostaEscolhida(index)}
                                 >
-                                    <p>{resposta.texto}</p>
+                                    {resposta.texto}
                                 </div>
                             ))}
                         </div>
-                        <div className={style['qq-pontuacao']}>
-                            <p>Pontuação: {pontuacao}</p>
-                        </div>
-                        <div className={style['qq-nav']}>
-                            <button onClick={handleNextQuestion}>Próxima</button>
-                        </div>
+                        <p>
+                            {perguntaIndex + 1}/{perguntas.length}
+                        </p>
                     </div>
                 </div>
             ) : (
-                <div>
-                    <h2>Fim do Quiz</h2>
-                    <p>Sua pontuação foi: {pontuacao}</p>
-                </div>
+                <QuizResults
+                    pontuacao={pontuacao}
+                    totalPerguntas={perguntas.length}
+                    onRestartQuiz={handleRestartQuiz}
+                />
             )}
         </>
     );

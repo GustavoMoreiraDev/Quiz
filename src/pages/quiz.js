@@ -1,8 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
 
-import QuizComponent from '@/components/Home/quiz';
 import Private from '@/components/Private';
+import QuizComponent from '@/components/Home/quiz';
 
 const Quiz = () => {
 

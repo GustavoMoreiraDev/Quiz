@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import style from './style.module.css';
 import { ResultsContext } from '../../../service/resultsContext';
-import { Instrucoes } from '../instrucoes';
 import { QuizQuestions } from '../QuizQuestions';
+import style from './style.module.css';
 
 const QuizComponent = () => {
   const { username } = useContext(ResultsContext);
@@ -25,7 +24,7 @@ const QuizComponent = () => {
         <h4>Bem-vindo(a) <strong dangerouslySetInnerHTML={{ __html: storedUsername || username }} /></h4>
       </header>
       <section className={style['q-content']}>
-          <QuizQuestions />
+          <QuizQuestions nickname={username} />
       </section>
       <footer>
         
