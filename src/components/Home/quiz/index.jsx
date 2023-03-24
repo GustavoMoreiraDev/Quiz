@@ -26,9 +26,7 @@ const QuizComponent = () => {
       <section className={style['q-content']}>
           <QuizQuestions nickname={username} />
       </section>
-      <footer>
-        
-      </footer>
+      <footer></footer>
     </>
   );
 };
