@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import style from './style.module.css';
 import axios from "axios";
 
-export function QuizQuestions() {
+import QuizResults from "../QuizResults";
+
+export function QuizQuestions({ nickname }) {
+
     const [perguntaIndex, setPerguntaIndex] = useState(0);
     const [perguntas, setPerguntas] = useState([]);
     const [pontuacao, setPontuacao] = useState(0);
-    const [tempoTotal, setTempoTotal] = useState(120); // 120 seconds
+    const [tempoTotal, setTempoTotal] = useState(3); // 10 seconds
     const [tempoRestante, setTempoRestante] = useState(0);
+    const [quizConcluido, setQuizConcluido] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -16,7 +20,7 @@ export function QuizQuestions() {
             setTempoRestante(tempoTotal);
         }
         fetchData();
-    }, []);
+    }, [tempoTotal]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -47,13 +51,21 @@ export function QuizQuestions() {
         }
     }
 
+    function restartGame() {
+        setPerguntaIndex(0);
+        setPontuacao(0);
+        setTempoRestante(tempoTotal);
+        setQuizConcluido(false);
+    }
+
     function handleQuizEnd() {
+        setQuizConcluido(true);
         setTempoRestante(0);
     }
 
     return (
         <>
-            {perguntas.length > 0 && perguntaIndex < perguntas.length ? (
+            {perguntas.length > 0 && perguntaIndex < perguntas.length && !quizConcluido ? (
                 <div className={style['qq-container']}>
                     <div className={style["qq-timer-wrap"]}>
                         <p>Tempo restante:</p>
@@ -63,24 +75,22 @@ export function QuizQuestions() {
                     </div>
                     <h3>{perguntas[perguntaIndex].pergunta}</h3>
                     <div className={style["qq-wrapper"]}>
-                        <Respo
+                        <Respostas
                             respostas={perguntas[perguntaIndex].respostas}
                             onRespostaEscolhida={handleRespostaEscolhida}
                         />
                     </div>
                 </div>
             ) : (
-                <div className={style['qq-container']}>
-                    <h3>Parabéns! Você finalizou o quiz.</h3>
-                    <p>Pontuação: {pontuacao}</p>
-                    <p>Tempo total: {tempoTotal} segundos</p>
-                </div>
+                <>
+                    <QuizResults correctAnswers={pontuacao} onRestartQuiz={restartGame} username={nickname} />
+                </>
             )}
         </>
     )
 };
 
-function Respo({ respostas, onRespostaEscolhida }) {
+function Respostas({ respostas, onRespostaEscolhida }) {
     function handleButtonClick(index) {
         onRespostaEscolhida(index);
     }

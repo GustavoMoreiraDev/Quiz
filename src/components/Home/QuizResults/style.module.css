@@ -1,14 +1,14 @@
 .qr-container {
-    gap: 20px;
+    gap: 40px;
     width: 650px;
     display: flex;
     cursor: default;
     color: #ffffff;
-    padding: 80px 50px;
+    padding: 40px 50px;
     border-radius: 10px;
     align-items: center;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     background-color: rgb(97, 6, 158);
 }
 .qr-container h3 {
@@ -34,4 +34,12 @@
 .qr-container button:hover {
     background-color:rgb(173, 104, 219);
     transition: 0.3s all;
+}
+.qr-content-bottom {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.qr-content-bottom-btn {
+    text-decoration: underline;
 }

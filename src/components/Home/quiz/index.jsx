@@ -25,7 +25,7 @@ const QuizComponent = () => {
         <h4>Bem-vindo(a) <strong dangerouslySetInnerHTML={{ __html: storedUsername || username }} /></h4>
       </header>
       <section className={style['q-content']}>
-          <QuizQuestions />
+          <QuizQuestions nickname={username} />
       </section>
       <footer>
         
