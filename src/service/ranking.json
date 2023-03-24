@@ -1,0 +1,36 @@
+{
+    "jogadores": [
+        {
+            "jogador": "João",
+            "pontuacao": "130"
+        },
+        {
+            "jogador": "Matheus",
+            "pontuacao": "110"
+        },
+        {
+            "jogador": "Gustavo",
+            "pontuacao": "180"
+        },
+        {
+            "jogador": "Luiz",
+            "pontuacao": "140"
+        },
+        {
+            "jogador": "Pedro Henrique",
+            "pontuacao": "120"
+        },
+        {
+            "jogador": "Samuel",
+            "pontuacao": "110"
+        },
+        {
+            "jogador": "Rodolfo da Silva",
+            "pontuacao": "90"
+        },
+        {
+            "jogador": "Jhonathan",
+            "pontuacao": "80"
+        }
+    ]
+}

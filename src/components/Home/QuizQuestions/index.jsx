@@ -9,7 +9,7 @@ export function QuizQuestions({ nickname }) {
     const [perguntaIndex, setPerguntaIndex] = useState(0);
     const [perguntas, setPerguntas] = useState([]);
     const [pontuacao, setPontuacao] = useState(0);
-    const [tempoTotal, setTempoTotal] = useState(3); // 10 seconds
+    const [tempoTotal, setTempoTotal] = useState(30); // 30 seconds
     const [tempoRestante, setTempoRestante] = useState(0);
     const [quizConcluido, setQuizConcluido] = useState(false);
 

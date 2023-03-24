@@ -1,0 +1,12 @@
+.rl-container {
+    width: 100%;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+.rl-content-wrapper {
+    width: 950px;
+    height: 650px;
+    background-color: #2b2929;
+}
