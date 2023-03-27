@@ -1,36 +1,44 @@
 {
     "jogadores": [
         {
+            "ranking": "3",
             "jogador": "João",
-            "pontuacao": "130"
+            "pontuacao": "150"
         },
         {
+            "ranking": "2",
             "jogador": "Matheus",
-            "pontuacao": "110"
+            "pontuacao": "160"
         },
         {
+            "ranking": "1",
             "jogador": "Gustavo",
             "pontuacao": "180"
         },
         {
+            "ranking": "4",
             "jogador": "Luiz",
             "pontuacao": "140"
         },
         {
+            "ranking": "5",
             "jogador": "Pedro Henrique",
             "pontuacao": "120"
         },
         {
+            "ranking": "6",
             "jogador": "Samuel",
             "pontuacao": "110"
         },
         {
+            "ranking": "7",
             "jogador": "Rodolfo da Silva",
             "pontuacao": "90"
         },
         {
+            "ranking": "8",
             "jogador": "Jhonathan",
-            "pontuacao": "80"
+            "pontuacao": "75"
         }
     ]
 }
