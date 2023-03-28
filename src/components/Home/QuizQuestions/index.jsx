@@ -12,6 +12,7 @@ export function QuizQuestions({ nickname }) {
     const [tempoTotal, setTempoTotal] = useState(30); // 30 seconds
     const [tempoRestante, setTempoRestante] = useState(0);
     const [quizConcluido, setQuizConcluido] = useState(false);
+    const [todasPerguntasRespondidas, setTodasPerguntasRespondidas] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -21,6 +22,18 @@ export function QuizQuestions({ nickname }) {
         }
         fetchData();
     }, [tempoTotal]);
+
+    async function sendScoreToServer() {
+        try {
+            const response = await axios.post('https://spilinsh.vercel.app/ranking/send', {
+                jogador: nickname,
+                pontuacao: pontuacao
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -35,12 +48,14 @@ export function QuizQuestions({ nickname }) {
     }, [tempoRestante]);
 
     function handleRespostaEscolhida(respostaIndex) {
-        const perguntaAtual = perguntas[perguntaIndex];
-        const respostaCorretaIndex = perguntaAtual.respostas.findIndex(r => r.verdadeira);
-        if (respostaIndex === respostaCorretaIndex) {
-            setPontuacao(pontuacao + 1);
+        if (!quizConcluido) {
+            const perguntaAtual = perguntas[perguntaIndex];
+            const respostaCorretaIndex = perguntaAtual.respostas.findIndex(r => r.verdadeira);
+            if (respostaIndex === respostaCorretaIndex) {
+                setPontuacao(pontuacao + 1);
+            }
+            handleNextQuestion();
         }
-        handleNextQuestion();
     }
 
     function handleNextQuestion() {
@@ -56,12 +71,17 @@ export function QuizQuestions({ nickname }) {
         setPontuacao(0);
         setTempoRestante(tempoTotal);
         setQuizConcluido(false);
+        setTodasPerguntasRespondidas(false);
     }
 
     function handleQuizEnd() {
-        setQuizConcluido(true);
+        if (!quizConcluido) {
+            sendScoreToServer();
+            setQuizConcluido(true);
+        }
         setTempoRestante(0);
     }
+
 
     return (
         <>
@@ -89,6 +109,8 @@ export function QuizQuestions({ nickname }) {
         </>
     )
 };
+
+
 
 function Respostas({ respostas, onRespostaEscolhida }) {
     function handleButtonClick(index) {
