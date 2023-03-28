@@ -44,5 +44,23 @@
     padding: 10px 25px;
     border-radius: 5px;
     text-decoration: none;
-    background-color: rgb(106, 10, 111);
+    background-color: #ffffff3e;
+}
+.pagination-wrapper {
+    justify-content: center;
+    padding: 40px 0 0 0;
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+.pagination-btn {
+    background-color: #ffffff3e;
+    justify-content: center;
+    border-radius: 5px;
+    align-items: center;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    height: 30px;
+    width: 30px;
 }

@@ -53,3 +53,25 @@
     background-color:rgb(74, 19, 110);
     transition: 0.3s all;
 }
+
+.qq-error-wrapper {
+    gap: 10px;
+    width: 350px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #00000000;
+}
+.qq-error-wrapper p {
+    font-weight: 500;
+    line-height: 23px;
+    letter-spacing: 1px;
+    padding: 10px 0;
+}
+.qq-error-wrapper button {
+    background-color: rgb(74, 19, 110);
+    font-weight: 600;
+    color: #ffffff;
+    width: 150px;
+    padding: 10px 20px;
+}
