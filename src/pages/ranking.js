@@ -8,7 +8,7 @@ const RankingPage = () => {
     return (
         <>
             <Head>
-                <title>Ranking | Quiz | Teste de Conhecimento</title>
+                <title>Quiz | Teste de Conhecimento</title>
                 <meta name="description" content="Teste seu conhecimento em nosso quiz e descubra o quanto você sabe sobre o assunto em apenas algumas perguntas! Desafie a si mesmo agora!" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />

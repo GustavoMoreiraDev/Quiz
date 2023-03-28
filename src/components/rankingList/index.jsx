@@ -7,26 +7,28 @@ const RankingList = () => {
 
     useEffect(() => {
         const fetchJogadores = async () => {
-            const res = await fetch('/ranking.json');
+            const res = await fetch('https://spilinsh.vercel.app/ranking');
             const data = await res.json();
-            setJogadores(data.jogadores);
+            setJogadores(data);
         };
 
         fetchJogadores();
     }, []);
 
-    const sortedJogadores = jogadores.sort((a, b) => {
-        return parseInt(a.ranking) - parseInt(b.ranking);
-    });
+    const getSortedJogadores = (jogadores) => {
+        return jogadores.sort((a, b) => {
+            return parseInt(b.pontuacao) - parseInt(a.pontuacao);
+        }).slice(0, 20);
+    };
 
     return (
         <>
             <main className={style['rl-container']}>
                 <div className={style['rl-content-wrapper']}>
-                    {sortedJogadores.map((jogador, index) => {
+                    {getSortedJogadores(jogadores).map((jogador, index) => {
                         return (
                             <div className={style['rl-jogador']} key={index}>
-                                <p>{jogador.ranking}</p>
+                                <p>{index + 1}</p>
                                 <p>{jogador.jogador}</p>
                                 <p>{jogador.pontuacao}</p>
                             </div>
