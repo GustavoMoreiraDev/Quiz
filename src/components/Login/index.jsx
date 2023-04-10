@@ -36,8 +36,8 @@ const Login = () => {
             <div className={style['l-container']}>
                 <form className={style['l-card']} onSubmit={handleSubmit}>
                     <div className={style['l-card-txt-wrapper']}>
-                        <h1>Quiz</h1>
-                        <p>Teste agora mesmo seus conhecimentos gerais!!</p>
+                        {/* <h1>Quiz</h1> */}
+                        {/* <p>Teste agora mesmo seus conhecimentos gerais!!</p> */}
                     </div>
                     <InputMask
                         type={'text'}
