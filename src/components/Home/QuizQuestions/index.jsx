@@ -86,16 +86,16 @@ export function QuizQuestions({ nickname }) {
         setTempoRestante(0);
     }
 
-    if (quizConcluido) {
-        return (
-            <>
-                <QuizResults correctAnswers={pontuacao} onRestartQuiz={restartGame} username={nickname} />
-            </>
-        );
-    } else {
-        return (
-            <>
-                {perguntas.length > 0 && perguntaIndex < perguntas.length ? (
+    if (perguntasCarregadas) {
+        if (quizConcluido) {
+            return (
+                <>
+                    <QuizResults correctAnswers={pontuacao} onRestartQuiz={restartGame} username={nickname} />
+                </>
+            );
+        } else {
+            return (
+                <>
                     <div className={style['qq-container']}>
                         <div className={style["qq-timer-wrap"]}>
                             <p>Tempo restante:</p>
@@ -111,22 +111,27 @@ export function QuizQuestions({ nickname }) {
                             />
                         </div>
                     </div>
-                ) : (
-                    <div className={style['qq-container']}>
-                        <div className={style["qq-timer-wrap"]}>
-                            <p>Tempo restante:</p>
-                            <p>
-                                <strong>00:00s</strong>
-                            </p>
-                        </div>
-                        <div className={style["qq-error-wrapper"]}>
-                            
-                        </div>
+                </>
+            );
+        }
+    } else {
+        return (
+            <>
+                <div className={style['qq-container']}>
+                    <div className={style["qq-timer-wrap"]}>
+                        <p>Tempo restante:</p>
+                        <p>
+                            <strong>00:00s</strong>
+                        </p>
                     </div>
-                )}
+                    <div className={style["qq-error-wrapper"]}>
+
+                    </div>
+                </div>
             </>
         );
     }
+
 
 };
 
