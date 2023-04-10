@@ -19,31 +19,30 @@
     left: 0;
     top: 0;
 }
-.bg-image.zoom {
-    animation-delay: 0s;
-    animation: zoom 20s infinite;
-    animation-timing-function: ease-in-out;
-}
-@keyframes zoom {
-    0% {
-        transform: scale(1);
-        transform-origin: center center;
-    }
-    50% {
-        transform: scale(1.15);
-        transform-origin: center center;
-    }
-    100% {
-        transform: scale(1);
-        transform-origin: center center;
-    }
-}
 
 .teste-div {
     top: 100px;
     right: 100px;
     width: 550px;
     height: 250px;
+    overflow: hidden;
     position: absolute;
-    background-color: red;  
+    background-color: red;
+}
+
+.teste-img {
+    width: 550px;
+    height: auto;
+    object-fit: cover;
+    transform-origin: center;
+    animation: zoom 20s forwards;
+}
+
+@keyframes zoom {
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(1.5);
+    }
 }
